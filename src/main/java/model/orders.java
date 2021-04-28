@@ -13,7 +13,14 @@ public class orders {
     /**Pretul total*/
     private int price;
 
-    /**Creeaza un obiect instanta a clasei orders*/
+    /**
+     * Constructorul clasei orders
+     * @param id id-ul
+     * @param idProduct id-ul produsului
+     * @param idClient id-ul clientului
+     * @param quantity cantitatea pe care dorim sa o comandam
+     * @param price pretul total
+     */
     public orders( int id, int idProduct, int idClient, int quantity, int price) {
         this.id = id;
         this.idProduct = idProduct;
@@ -22,7 +29,13 @@ public class orders {
         this.price = price;
     }
 
-    /**Creeaza un obiect instanta a clasei orders*/
+    /**
+     * Constructorul clasei orders
+     * @param idProduct id-ul produsului
+     * @param idClient id-ul clientului
+     * @param quantity cantitatea pe care dorim sa o comandam
+     * @param price pretul total
+     */
     public orders(int idProduct, int idClient, int quantity, int price) {
         this.idProduct = idProduct;
         this.idClient = idClient;
@@ -41,7 +54,7 @@ public class orders {
 
     /**
      * Seteaza id-ul comenzii
-     * @param id
+     * @param id id-ul comenzii
      */
     public void setId(int id) {
         this.id = id;
@@ -57,7 +70,7 @@ public class orders {
 
     /**
      * Seteaza id-ul produsului
-     * @param idProduct
+     * @param idProduct id-ul produsului
      */
     public void setIdProduct(int idProduct) {
         this.idProduct = idProduct;
@@ -73,7 +86,7 @@ public class orders {
 
     /**
      * Seteaza id-ul clientului
-     * @param idClient
+     * @param idClient id-ul clientului
      */
     public void setIdClient(int idClient) {
         this.idClient = idClient;
@@ -89,7 +102,7 @@ public class orders {
 
     /**
      * Seteaza cantitatea
-     * @param quantity
+     * @param quantity cantitatea
      */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
@@ -105,7 +118,7 @@ public class orders {
 
     /**
      * Seteaza pretul
-     * @param price
+     * @param price pretul
      */
     public void setPrice(int price) {
         this.price = price;

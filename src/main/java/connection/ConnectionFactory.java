@@ -4,6 +4,9 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Clasa care realizeaza conexiunea cu baza de date
+ */
 public class ConnectionFactory {
     private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class.getName());
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -32,10 +35,18 @@ public class ConnectionFactory {
         return connection;
     }
 
+    /**
+     * Obtine conexiunea
+     * @return conexiunea
+     */
     public static Connection getConnection(){
         return singleInstance.createConnection();
     }
 
+    /**
+     * Inchide conexiunea
+     * @param connection conexiunea
+     */
     public static void close(Connection connection){
         if (connection != null) {
             try {
@@ -46,6 +57,10 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Inchide conexiunea
+     * @param statement inchide statement-ul
+     */
     public static void close(Statement statement){
         if (statement != null) {
             try {
@@ -56,6 +71,10 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Inchide conexiunea
+     * @param resultSet inchide resultSet-ul
+     */
     public static void close(ResultSet resultSet){
         if (resultSet != null) {
             try {

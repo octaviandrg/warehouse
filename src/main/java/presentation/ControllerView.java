@@ -26,28 +26,97 @@ import java.util.ArrayList;
  */
 public class ControllerView extends JFrame{
 
+    /**
+     * panel principal
+     */
     public JPanel contentPane;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldNameClient;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldEmailClient;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldAgeClient;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldNameUpdate;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldEmailUpdate;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldAgeUpdate;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdUpdate;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdDelete;
+    /**
+     * tabelul cu clienti
+     */
     public JTable tableClients;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldNameAddProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldPriceAddProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldQuantityAddProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldNameUpdateProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldPriceUpdateProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldQuantityUpdateProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdUpdateProduct;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdDeleteProduct;
+    /**
+     * tabelul cu produse
+     */
     public JTable tableProducts;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdClientOrder;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldIdProductOrder;
+    /**
+     * zona de scris date
+     */
     public JTextField textFieldQuantityOrder;
+    /**
+     * tabelul cu comenzi
+     */
     public JTable tableOrders;
 
 

@@ -76,7 +76,6 @@ public class clientBLL {
     /**
      * Sterge in tabelul client
      * @param id clientul care trebuie sters dupa parametru
-     * @return Operatia de delete pe client
      */
     public void deleteClient(int id){
         try{

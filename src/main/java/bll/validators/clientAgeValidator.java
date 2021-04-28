@@ -4,7 +4,9 @@ import model.client;
 
 import static java.lang.System.exit;
 
-
+/**
+ * Clasa responsabila de validarea clientului
+ */
 public class clientAgeValidator implements Validator<client>{
     private static final int MIN_AGE = 5;
 

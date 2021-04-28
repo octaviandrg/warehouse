@@ -2,6 +2,9 @@ package bll.validators;
 
 import model.orders;
 
+/**
+ * Clasa care valideaza comenzile
+ */
 public class ordersQuantityValidator implements Validator<orders>{
     private static final int MIN_QUANTITY = 2;
     /**

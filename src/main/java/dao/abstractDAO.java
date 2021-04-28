@@ -356,7 +356,6 @@ public class abstractDAO<T> {
     /**
      * Sterge obiectul t in tabelul corespunzator
      * @param id respectivului obiect care trebuie sters
-     * @throws SQLException
      */
     public void delete(int id){
         Connection connection = null;

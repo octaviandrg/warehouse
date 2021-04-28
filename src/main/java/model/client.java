@@ -13,7 +13,13 @@ public class client {
     /**Varsta clientului*/
     private  int age;
 
-    /**Creeaza un obiect instanta a clasei client*/
+    /**
+     * Constructorul clasei client
+     * @param id id-ul
+     * @param name numele
+     * @param email email-ul
+     * @param age varsta
+     */
     public client(int id, String name, String email, int age){
         this.id = id;
         this.email = email;
@@ -21,7 +27,12 @@ public class client {
         this.age = age;
     }
 
-    /**Creeaza un obiect instanta a clasei client*/
+    /**
+     * Constructorul clasei client
+     * @param name numele
+     * @param email email-ul
+     * @param age varsta
+     */
     public client( String name, String email, int age){
         this.email = email;
         this.name = name;

@@ -72,7 +72,6 @@ public class productBLL {
     /**
      * Sterge in tabelul product
      * @param id produsul care trebuie sters dupa parametru
-     * @return Operatia de delete pe product
      */
     public void deleteProduct(int id){
         try{

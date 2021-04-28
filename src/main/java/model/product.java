@@ -12,7 +12,13 @@ public class product {
     /**Cantitatea produsului*/
     private int quantity;
 
-    /**Creeaza un obiect instanta a clasei product*/
+    /**
+     * Creeaza un obiect de tipul product
+     * @param id id-ul produsului
+     * @param name numele
+     * @param price pretul
+     * @param quantity cantitatea
+     */
     public product(int id, String name, int price, int quantity){
         this.id = id;
         this.name = name;
@@ -20,7 +26,12 @@ public class product {
         this.quantity = quantity;
     }
 
-    /**Creeaza un obiect instanta a clasei product*/
+    /**
+     * Creeaza un obiect de tipul product
+     * @param name numele
+     * @param price pretul
+     * @param quantity cantitatea
+     */
     public product(String name, int price, int quantity){
         this.name = name;
         this.price = price;
@@ -37,7 +48,7 @@ public class product {
 
     /**
      * Seteaza cantitatea
-     * @param quantity
+     * @param quantity cantitatea
      */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
@@ -53,7 +64,7 @@ public class product {
 
     /**
      * Seteaza id-ul
-     * @param id
+     * @param id id-ul
      */
     public void setId(int id){
         this.id = id;
@@ -77,7 +88,7 @@ public class product {
 
     /**
      * Seteaza numele
-     * @param name
+     * @param name numele
      */
     public void setName(String name){
         this.name = name;
@@ -85,7 +96,7 @@ public class product {
 
     /**
      * Seteaza pretul
-     * @param price
+     * @param price pretul
      */
     public void setPrice(int price){
         this.price = price;

@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Clasa care genereaza o factura
+ */
 public class generateBill {
     /**
      * Genereaza factura corespunzatoare comenzii create
@@ -16,7 +19,7 @@ public class generateBill {
      * @param p produsul comandat
      * @param quantity cantitatea comandata
      * @param total_price pretul total
-     * @throws IOException
+     * @throws IOException arunca exceptie
      */
     public generateBill(int id, client c, product p, int quantity, int total_price) throws IOException {
         StringBuilder output = new StringBuilder();

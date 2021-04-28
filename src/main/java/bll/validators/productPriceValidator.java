@@ -2,6 +2,9 @@ package bll.validators;
 
 import model.product;
 
+/**
+ * Clasa responsabila de validarea produsului
+ */
 public class productPriceValidator implements Validator<product>{
     private static final int MIN_PRICE = 5;
     /**
