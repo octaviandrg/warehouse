@@ -9,29 +9,30 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.lang.reflect.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** Furnizeaza metode pentru interactionarea cu un tabel din baza de date*/
 public class abstractDAO<T> {
-    /** Tine rostul erorilor intalnite in rularea programului*/
+    /**
+     * Tine rostul erorilor intalnite in rularea programului
+     */
     protected static final Logger LOGGER = Logger.getLogger(abstractDAO.class.getName());
-    /** Clasa genericului*/
+    /**
+     * Clasa genericului
+     */
     private final Class<T> type;
 
 
-    /**Creaza un obiect instanta a clasei abstractDAO*/
+    /**
+     * Creaza un obiect instanta a clasei abstractDAO
+     */
     @SuppressWarnings("unchecked")
     public abstractDAO() {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -39,12 +40,12 @@ public class abstractDAO<T> {
 
     /**
      * Creaza obiecte de tipul T cu ajutorul unui result set
+     *
      * @param resultSet contine informatii extrase din tabelul corespunzator
      * @return Lista de obiecte de tipul T, fiecare reprezentand o linie din tabel, care se afla in data base
      */
-    private ArrayList<T> createObjectsFromResultSet(ResultSet resultSet) {
-        ArrayList<T> list = new ArrayList<T>();
-
+    private List<T> createObjects(ResultSet resultSet) {
+        List<T> list = new ArrayList<T>();
         try {
             while (resultSet.next()) {
                 T instance = type.newInstance();
@@ -56,6 +57,7 @@ public class abstractDAO<T> {
                 }
                 list.add(instance);
             }
+
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | SQLException | IntrospectionException e) {
             e.printStackTrace();
         }
@@ -122,6 +124,7 @@ public class abstractDAO<T> {
         sb.append("* ");
         sb.append("FROM ");
         sb.append((type.getSimpleName()));
+        sb.append(";");
         return sb.toString();
     }
 
@@ -143,7 +146,7 @@ public class abstractDAO<T> {
      * Creaza un array list de obiecte din clasa T care reprezinta toate datele din tabelul corespunzator
      * @return Lista de obiecte de tipul T
      */
-    public ArrayList<T> findAll() {
+    public List<T> findAll() {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -152,7 +155,7 @@ public class abstractDAO<T> {
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(query);
             resultSet = statement.executeQuery();
-            return createObjectsFromResultSet(resultSet);
+            return createObjects(resultSet);
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:findAll " + e.getMessage());
         } finally {
@@ -162,6 +165,53 @@ public class abstractDAO<T> {
         }
         return null;
     }
+
+    public JTable createTable(List<T> objects) throws IllegalArgumentException, IllegalAccessException {
+        ArrayList<String> columnNamesArrayList = new ArrayList<String>();
+        for(Field field : objects.get(0).getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            columnNamesArrayList.add(field.getName());
+        }
+        String[] columnNames = new String[columnNamesArrayList.size()];
+        columnNames = columnNamesArrayList.toArray(columnNames);
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        Iterator<T> i = objects.iterator();
+        while(i.hasNext()) {
+            T object = i.next();
+            ArrayList<Object> columnDataAsArrayList = new ArrayList<Object>();
+            for(Field field : object.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                columnDataAsArrayList.add(field.get(object));
+            }
+            Object[] columnDataAsArray = new Object[columnDataAsArrayList.size()];
+            columnDataAsArray = columnDataAsArrayList.toArray(columnDataAsArray);
+            tableModel.addRow(columnDataAsArray);
+        }
+        return new JTable(tableModel);
+    }
+
+    public <T> List<T> getTable(Class<T> type) {
+        List<T> result = new ArrayList<>();
+        Connection connection = ConnectionFactory.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM warehouse." + type.getSimpleName());
+            while (resultSet.next()) {
+                T instance = type.getDeclaredConstructor().newInstance();
+                for (Field field : instance.getClass().getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object value = resultSet.getObject(field.getName());
+                    field.set(instance, value);
+                }
+                result.add(instance);
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return result;
+    }
+
+
 
     /**
      * Creaza un array list de obiecte din clasa client care reprezinta toate datele din tabelul corespunzator
@@ -192,6 +242,8 @@ public class abstractDAO<T> {
         }
         return clientList;
     }
+
+
 
     /**
      * Creaza un array list de obiecte din clasa product care reprezinta toate datele din tabelul corespunzator
@@ -269,7 +321,7 @@ public class abstractDAO<T> {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
 
-            return createObjectsFromResultSet(resultSet).get(0);
+            return createObjects(resultSet).get(0);
         } catch (SQLException e) {
             LOGGER.log(Level.WARNING, type.getName() + "DAO:findById " + e.getMessage());
         } finally {

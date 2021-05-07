@@ -39,6 +39,9 @@ public class client {
         this.age = age;
     }
 
+    public client(){
+    }
+
     /**
      * Obtine id-ul clientului
      * @return id-ul

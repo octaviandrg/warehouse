@@ -42,6 +42,8 @@ public class orders {
         this.quantity = quantity;
         this.price = price;
     }
+    public orders() {
+    }
 
 
     /**

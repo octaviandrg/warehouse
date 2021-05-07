@@ -10,7 +10,7 @@ public class MainClass{
      * Functia principala
      * @param args argumentele din linia de comanda
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
         ControllerView frame = new ControllerView();
         frame.setVisible(true);
     }

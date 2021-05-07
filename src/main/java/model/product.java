@@ -37,6 +37,8 @@ public class product {
         this.price = price;
         this.quantity = quantity;
     }
+    public product(){
+    }
 
     /**
      * Obtine cantitatea

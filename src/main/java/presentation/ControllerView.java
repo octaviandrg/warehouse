@@ -3,6 +3,8 @@ package presentation;
 import bll.clientBLL;
 import bll.ordersBLL;
 import bll.productBLL;
+import com.mysql.cj.xdevapi.Client;
+import dao.abstractDAO;
 import dao.clientDAO;
 import dao.ordersDAO;
 import dao.productDAO;
@@ -10,6 +12,7 @@ import model.client;
 import model.orders;
 import model.product;
 import utils.generateBill;
+import utils.generateTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Se creeaza frame-ul principal si se controleaza butoanele
@@ -123,7 +127,7 @@ public class ControllerView extends JFrame{
     /**
      * Constructorul clasei care este responsabil de instantierea tuturor obeictelor folosite in interfata
      */
-    public ControllerView() {
+    public ControllerView() throws IllegalAccessException {
         setTitle("Warehouse");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 792, 600);
@@ -249,13 +253,7 @@ public class ControllerView extends JFrame{
         panelClients.add(scrollPane);
 
         tableClients = new JTable();
-        tableClients.setModel(new DefaultTableModel(
-                new Object[][]{
-                },
-                new String[]{
-                        "ID", "NAME", "EMAIL", "AGE"
-                }
-        ));
+
         scrollPane.setViewportView(tableClients);
 
         JButton btnBackToMainMenuClient = new JButton("MAIN MENU");
@@ -356,13 +354,7 @@ public class ControllerView extends JFrame{
         panelProducts.add(scrollPane_1);
 
         tableProducts = new JTable();
-        tableProducts.setModel(new DefaultTableModel(
-                new Object[][]{
-                },
-                new String[]{
-                        "ID", "NAME", "PRICE", "QUANTITY"
-                }
-        ));
+
         scrollPane_1.setViewportView(tableProducts);
 
         JButton btnBackToMainMenuProduct = new JButton("MAIN MENU");
@@ -421,13 +413,7 @@ public class ControllerView extends JFrame{
         panelOrders.add(scrollPane_1_1);
 
         tableOrders = new JTable();
-        tableOrders.setModel(new DefaultTableModel(
-                new Object[][]{
-                },
-                new String[]{
-                        "ID", "IDCLIENT", "IDPRODUCT", "QUANTITY", "PRICE"
-                }
-        ));
+
         scrollPane_1_1.setViewportView(tableOrders);
 
         btnBackToMainMenuClient.addActionListener(new ActionListener() {
@@ -449,6 +435,8 @@ public class ControllerView extends JFrame{
             }
         });
 
+
+
         btnClients.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 panelPrincipal.setVisible(false);
@@ -457,7 +445,11 @@ public class ControllerView extends JFrame{
                 panelOrders.setVisible(false);
                 DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
                 model.setRowCount(0);
-                show_clients();
+                try {
+                    tabelC();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -470,7 +462,11 @@ public class ControllerView extends JFrame{
                 panelOrders.setVisible(false);
                 DefaultTableModel model = (DefaultTableModel) tableProducts.getModel();
                 model.setRowCount(0);
-                show_products();
+                try {
+                    tabelP();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -482,7 +478,11 @@ public class ControllerView extends JFrame{
                 panelOrders.setVisible(true);
                 DefaultTableModel model = (DefaultTableModel) tableOrders.getModel();
                 model.setRowCount(0);
-                show_orders();
+                try {
+                    tabelO();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -494,7 +494,11 @@ public class ControllerView extends JFrame{
                 panelOrders.setVisible(false);
                 DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
                 model.setRowCount(0);
-                show_clients();
+                try {
+                    show_clients();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -518,7 +522,12 @@ public class ControllerView extends JFrame{
                 clientBLL cBLL = new clientBLL();
                 cBLL.insertClient(c);
                 DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
-                model.addRow(new Object[]{(int)tableClients.getValueAt((tableClients.getRowCount()-1), 0)+1, c.getName(),c.getEmail(),c.getAge()});
+                model.setRowCount(0);
+                try {
+                    show_clients();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -552,9 +561,14 @@ public class ControllerView extends JFrame{
                     cBLL.updateClient(client);
                     if(verif == 1) {
                         DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
-                        model.setValueAt(client.getName(), row, 1);
-                        model.setValueAt(client.getEmail(), row, 2);
-                        model.setValueAt(client.getAge(), row, 3);
+                        model.setRowCount(0);
+
+                        try {
+                            show_clients();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                     }
                     verif = 0;
@@ -576,11 +590,11 @@ public class ControllerView extends JFrame{
                         verif = 1;
                     }
                     else{++row;}
-                    if(verif == 1) {
-                        DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
-                        model.removeRow(row);
-                        break;
-                    }
+                }
+                if(verif == 1) {
+                    DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
+                    model.removeRow(row);
+                }else{System.out.println("Nu exista client cu id-ul:" + id);
                 }
             }
         });
@@ -591,7 +605,8 @@ public class ControllerView extends JFrame{
                 productBLL cBLL = new productBLL();
                 cBLL.insertProduct(p);
                 DefaultTableModel model = (DefaultTableModel) tableProducts.getModel();
-                model.addRow(new Object[]{(int)tableProducts.getValueAt((tableProducts.getRowCount()-1), 0)+1, p.getName(),p.getPrice(),p.getQuantity()});
+                model.setRowCount(0);
+                show_products();
 
             }
         });
@@ -626,9 +641,8 @@ public class ControllerView extends JFrame{
                     pBLL.updateProduct(product);
                     if(verif == 1) {
                         DefaultTableModel model = (DefaultTableModel) tableProducts.getModel();
-                        model.setValueAt(product.getName(), row, 1);
-                        model.setValueAt(product.getPrice(), row, 2);
-                        model.setValueAt(product.getQuantity(), row, 3);
+                        model.setRowCount(0);
+                        show_products();
                         break;
                     }
                     verif = 0;
@@ -650,12 +664,12 @@ public class ControllerView extends JFrame{
                             verif = 1;
                         }
                         else{++row;}
-                        if(verif == 1) {
-                            DefaultTableModel model = (DefaultTableModel) tableProducts.getModel();
-                            model.removeRow(row);
-                            break;
-                        }
+
                     }
+                if(verif == 1) {
+                    DefaultTableModel model = (DefaultTableModel) tableProducts.getModel();
+                    model.removeRow(row);
+                }else{System.out.println("Nu exista produs cu id-ul:" + id);}
                 }
         });
 
@@ -696,7 +710,7 @@ public class ControllerView extends JFrame{
                                     break;
                                 }
                             }
-                        }
+                        }else {System.out.println("Cantitate insuficenta!"); break;}
                     }
                     if(verif == 1){
                         orders o = new orders(Integer.parseInt(textFieldIdProductOrder.getText()),Integer.parseInt(textFieldIdClientOrder.getText()),Integer.parseInt(textFieldQuantityOrder.getText()),price);
@@ -715,10 +729,30 @@ public class ControllerView extends JFrame{
         });
     }
 
+
+    public void tabelC() throws IllegalAccessException {
+
+        clientDAO cDAO = new clientDAO();
+        List<client> cList = cDAO.findAll();
+        tableClients = cDAO.createTable(cList);
+
+    }
+
+    public void tabelP() throws IllegalAccessException {
+        productDAO pDAO = new productDAO();
+        tableProducts = pDAO.createTable(pDAO.findAll());
+    }
+
+    public void tabelO() throws IllegalAccessException {
+        ordersDAO oDAO = new ordersDAO();
+        tableOrders = oDAO.createTable(oDAO.findAll());
+    }
+
+
     /**
      * Afiseaza datele in tabelul din interfata
      */
-    public void show_clients(){
+    public void show_clients() throws IllegalAccessException {
         clientDAO c = new clientDAO();
         ArrayList<client> list = c.clientList();
         DefaultTableModel model = (DefaultTableModel) tableClients.getModel();
@@ -766,5 +800,8 @@ public class ControllerView extends JFrame{
             model.addRow(row);
         }
     }
+
+
+
 
     }
